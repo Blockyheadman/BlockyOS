@@ -1,4 +1,8 @@
 blank_issues_enabled: false
+issues:
+  - name: Bug Report
+    url: .github/ISSUE_TEMPLATE/bug-report.yml
+    about: Report a bug here
 contact_links:
   - name: Share an app or cahnges you made
     url: https://github.com/Blockyheadman/BlockyOS/discussions
