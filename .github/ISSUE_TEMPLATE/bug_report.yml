@@ -2,7 +2,7 @@
 Add any other context about the problem here.
 
 name: Bug Report
-description: Make a report on any bugs you've found.
+about: Make a report on any bugs you've found.
 title: "[BUG]: "
 labels: ["bug"]
 assignees:
