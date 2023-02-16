@@ -6,7 +6,7 @@
 * Smooth animations for everything
 * Feel-good window system
 * Apps support
-* Download Apps (Big W.I.P.)
 
 ## Supported Platforms
 * Windows
+* Linux/X11 (NOT TESTED)
