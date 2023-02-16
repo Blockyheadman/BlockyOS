@@ -111,6 +111,11 @@ func _on_button_pressed(button):
 				open_app(app_node, pressed_button)
 			else:
 				printerr("The file, 'res://" + pressed_button + "/Main.tscn' doesn't exist skipping opening app.")
+		else:
+			printerr("Failed to load pck file.")
+	else:
+		printerr("File doesn't exist. Not able to open.")
+		update_apps()
 
 # hides or shows the window when pressing the app's icon on the toolbar (OpenWindows)
 func _on_window_button_pressed(button, is_button : bool):
@@ -200,6 +205,8 @@ func open_app(app_node, app_name : String):
 
 # same as 'open_app()' but instead opens an app with built-in resources
 func open_built_in_app(app_node, app_name : String, icon):
+	var app_name_new = app_name
+	
 	var app_window_path = load("res://scenes/AppWindow.tscn")
 	var app_window_node = app_window_path.instance()
 	get_node("Windows").add_child(app_window_node)
@@ -210,9 +217,6 @@ func open_built_in_app(app_node, app_name : String, icon):
 	#app_window_node.visible = true
 	
 	app_window_node.connect("window_closed", self, "_on_window_closed")
-	
-	print("\n" + str(get_node(str("Windows/" + app_name))))
-	get_node(str("Windows/" + app_name)).add_child(app_node)
 	
 	var app_button_node = load("res://scenes/AppWindowButton.tscn").instance()
 	app_button_node.name = app_name
@@ -228,7 +232,11 @@ func open_built_in_app(app_node, app_name : String, icon):
 			print(count)
 			app_window_node.name = app_name + str(count)
 			app_button_node.name = app_name + str(count)
+			app_name_new = app_name + str(count)
 			count = count + 1
+	
+	print("\n" + str(get_node(str("Windows/" + app_name_new))))
+	get_node(str("Windows/" + app_name_new)).add_child(app_node)
 	
 	get_node("OpenWindowsBar/ScrollContainer/HBoxContainer").add_child(app_button_node, true)
 
@@ -364,14 +372,14 @@ func _on_WriteInstalledApps_pressed():
 
 func _on_OpenApp_pressed():
 	var icon = Image.new()
-	icon.load("res://resources/textures/Download.png")
+	icon.load("res://resources/textures/Setting.png")
 	var app_node_scene
 	var app_node
-	app_node_scene = load("res://scenes/AppDownloader.tscn")
+	app_node_scene = load("res://scenes/Settings.tscn")
 	print("\n" + str(app_node_scene))
 	app_node = app_node_scene.instance()
 	print("\n" + str(app_node))
-	open_built_in_app(app_node, "App Downloader", icon)
+	open_built_in_app(app_node, "Settings", icon)
 
 # ANIMATIONS GO HERE
 func _on_StartButton_mouse_entered():
