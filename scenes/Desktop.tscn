@@ -1,0 +1,182 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://resources/textures/Backgrounds/DefaultBackground.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Desktop.gd" type="Script" id=2]
+[ext_resource path="res://resources/icons/BlockyOS.png" type="Texture" id=3]
+[ext_resource path="res://resources/presets/StartMenuButton.tres" type="Theme" id=4]
+[ext_resource path="res://resources/presets/TransparentBlack.tres" type="StyleBox" id=5]
+[ext_resource path="res://resources/textures/Download.png" type="Texture" id=6]
+[ext_resource path="res://resources/textures/Settings.png" type="Texture" id=7]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.54902 )
+border_color = Color( 0, 0, 0, 0 )
+expand_margin_right = 2.0
+expand_margin_top = 2.0
+
+[node name="Desktop" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color( 0.784314, 0.784314, 0.784314, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="AppsGridContainer" type="GridContainer" parent="."]
+anchor_left = 0.025
+anchor_top = 0.044
+anchor_right = 0.975
+anchor_bottom = 0.956
+margin_top = 0.319998
+margin_bottom = -0.320007
+columns = 18
+
+[node name="StartMenu" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -272.0
+margin_right = 224.0
+margin_bottom = -52.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu"]
+margin_right = 224.0
+margin_bottom = 220.0
+
+[node name="DownloadApps" type="Button" parent="StartMenu/VBoxContainer"]
+margin_right = 224.0
+margin_bottom = 27.0
+theme = ExtResource( 4 )
+text = "Download Apps"
+icon = ExtResource( 6 )
+expand_icon = true
+
+[node name="UpdateApps" type="Button" parent="StartMenu/VBoxContainer"]
+margin_top = 31.0
+margin_right = 224.0
+margin_bottom = 58.0
+theme = ExtResource( 4 )
+text = "Update Apps List"
+
+[node name="Settings" type="Button" parent="StartMenu/VBoxContainer"]
+margin_top = 193.0
+margin_right = 224.0
+margin_bottom = 220.0
+size_flags_vertical = 10
+theme = ExtResource( 4 )
+text = "Settings"
+icon = ExtResource( 7 )
+expand_icon = true
+
+[node name="StartButton" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 0.041
+anchor_bottom = 1.0
+margin_top = -52.0
+margin_right = -0.480003
+rect_min_size = Vector2( 52, 52 )
+custom_styles/panel = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Button" type="Button" parent="StartButton"]
+margin_right = 52.0
+margin_bottom = 52.0
+rect_min_size = Vector2( 52, 52 )
+mouse_default_cursor_shape = 2
+toggle_mode = true
+icon = ExtResource( 3 )
+flat = true
+icon_align = 1
+expand_icon = true
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="OpenWindowsBar" type="PanelContainer" parent="."]
+anchor_left = 0.041
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.480003
+margin_top = -52.0
+custom_styles/panel = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="OpenWindowsBar"]
+margin_right = 1228.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_vertical_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OpenWindowsBar/ScrollContainer"]
+margin_right = 1228.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Windows" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="DebugTools" type="Control" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -272.0
+margin_top = -168.0
+margin_right = -16.0
+margin_bottom = -16.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="GridContainer" type="GridContainer" parent="DebugTools"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="RefreshApps" type="Button" parent="DebugTools/GridContainer"]
+margin_right = 256.0
+margin_bottom = 29.0
+text = "Refresh Installed Apps"
+
+[node name="WriteInstalledApps" type="Button" parent="DebugTools/GridContainer"]
+margin_top = 33.0
+margin_right = 256.0
+margin_bottom = 62.0
+text = "Write Installed Apps"
+
+[node name="OpenApp" type="Button" parent="DebugTools/GridContainer"]
+margin_top = 66.0
+margin_right = 256.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+text = "Open App"
+
+[connection signal="pressed" from="StartMenu/VBoxContainer/DownloadApps" to="." method="_on_DownloadApps_pressed"]
+[connection signal="pressed" from="StartMenu/VBoxContainer/UpdateApps" to="." method="_on_UpdateApps_pressed"]
+[connection signal="pressed" from="StartMenu/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="mouse_entered" from="StartButton/Button" to="." method="_on_StartButton_mouse_entered"]
+[connection signal="mouse_exited" from="StartButton/Button" to="." method="_on_StartButton_mouse_exited"]
+[connection signal="toggled" from="StartButton/Button" to="." method="_on_StartButton_toggled"]
+[connection signal="pressed" from="DebugTools/GridContainer/RefreshApps" to="." method="_on_RefreshApps_pressed"]
+[connection signal="pressed" from="DebugTools/GridContainer/WriteInstalledApps" to="." method="_on_WriteInstalledApps_pressed"]
+[connection signal="pressed" from="DebugTools/GridContainer/OpenApp" to="." method="_on_OpenApp_pressed"]
