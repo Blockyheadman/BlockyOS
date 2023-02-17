@@ -7,7 +7,6 @@ var user_path = OS.get_user_data_dir()
 var apps : Array
 
 func _ready():
-	OS.window_size = Vector2(1792, 1008)
 	$StartMenu/VBoxContainer/DownloadApps.queue_free()
 	$StartMenu/VBoxContainer/UpdateApps.set_v_size_flags(0)
 	OS.min_window_size = Vector2(640,360)
