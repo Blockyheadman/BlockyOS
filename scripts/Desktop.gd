@@ -404,7 +404,6 @@ func _on_OpenApp_pressed():
 	app_node = app_node_scene.instance()
 	print("\n" + str(app_node))
 	open_built_in_app(app_node, "Settings", icon)
-	open_built_in_app(app_node, "Settings", icon)
 
 # ANIMATIONS GO HERE
 func _on_StartButton_mouse_entered():
