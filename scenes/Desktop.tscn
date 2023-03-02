@@ -30,7 +30,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="AppsGridContainer" type="GridContainer" parent="."]
+[node name="Apps" type="CanvasLayer" parent="."]
+
+[node name="AppsGridContainer" type="GridContainer" parent="Apps"]
 anchor_left = 0.025
 anchor_top = 0.044
 anchor_right = 0.975
@@ -39,22 +41,26 @@ margin_top = 0.319998
 margin_bottom = -0.320007
 columns = 18
 
-[node name="StartMenu" type="PanelContainer" parent="."]
+[node name="MenuBar" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="StartMenu" type="PanelContainer" parent="MenuBar"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -272.0
+margin_top = -280.0
 margin_right = 224.0
-margin_bottom = -52.0
+margin_bottom = -60.0
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_lock_": true
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="StartMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/StartMenu"]
 margin_right = 224.0
 margin_bottom = 220.0
 
-[node name="DownloadApps" type="Button" parent="StartMenu/VBoxContainer"]
+[node name="DownloadApps" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
 margin_right = 224.0
 margin_bottom = 27.0
 theme = ExtResource( 4 )
@@ -62,14 +68,14 @@ text = "Download Apps"
 icon = ExtResource( 6 )
 expand_icon = true
 
-[node name="UpdateApps" type="Button" parent="StartMenu/VBoxContainer"]
+[node name="UpdateApps" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
 margin_top = 31.0
 margin_right = 224.0
 margin_bottom = 58.0
 theme = ExtResource( 4 )
 text = "Update Apps List"
 
-[node name="Settings" type="Button" parent="StartMenu/VBoxContainer"]
+[node name="Settings" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
 margin_top = 193.0
 margin_right = 224.0
 margin_bottom = 220.0
@@ -79,21 +85,21 @@ text = "Settings"
 icon = ExtResource( 7 )
 expand_icon = true
 
-[node name="StartButton" type="PanelContainer" parent="."]
+[node name="StartButton" type="PanelContainer" parent="MenuBar"]
 anchor_top = 1.0
-anchor_right = 0.041
 anchor_bottom = 1.0
-margin_top = -52.0
-margin_right = -0.480003
+margin_top = -60.0
+margin_right = 60.0
 rect_min_size = Vector2( 52, 52 )
 custom_styles/panel = ExtResource( 5 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_lock_": true
 }
 
-[node name="Button" type="Button" parent="StartButton"]
-margin_right = 52.0
-margin_bottom = 52.0
+[node name="Button" type="Button" parent="MenuBar/StartButton"]
+margin_right = 60.0
+margin_bottom = 60.0
 rect_min_size = Vector2( 52, 52 )
 mouse_default_cursor_shape = 2
 toggle_mode = true
@@ -105,37 +111,58 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="OpenWindowsBar" type="PanelContainer" parent="."]
-anchor_left = 0.041
+[node name="OpenWindowsBar" type="PanelContainer" parent="MenuBar"]
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.937
 anchor_bottom = 1.0
-margin_left = -0.480003
-margin_top = -52.0
+margin_left = 60.0
+margin_top = -60.0
+margin_right = 0.639648
 custom_styles/panel = ExtResource( 5 )
 __meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
+"_edit_group_": true
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="OpenWindowsBar"]
-margin_right = 1228.0
-margin_bottom = 52.0
+[node name="ScrollContainer" type="ScrollContainer" parent="MenuBar/OpenWindowsBar"]
+margin_right = 1140.0
+margin_bottom = 60.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OpenWindowsBar/ScrollContainer"]
-margin_right = 1228.0
-margin_bottom = 52.0
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/OpenWindowsBar/ScrollContainer"]
+margin_right = 1140.0
+margin_bottom = 60.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Windows" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="Clock" type="PanelContainer" parent="MenuBar"]
+anchor_left = 0.937
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.639893
+margin_top = -60.0
+custom_styles/panel = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="DebugTools" type="Control" parent="."]
+[node name="Label" type="Label" parent="MenuBar/Clock"]
+margin_top = 18.0
+margin_right = 80.0001
+margin_bottom = 41.0
+text = "23:59:59"
+align = 1
+
+[node name="Windows" type="Control" parent="."]
+
+[node name="WindowLayer" type="CanvasLayer" parent="Windows"]
+layer = 2
+
+[node name="Debugging" type="CanvasLayer" parent="."]
+
+[node name="DebugTools" type="Control" parent="Debugging"]
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -149,34 +176,21 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="GridContainer" type="GridContainer" parent="DebugTools"]
+[node name="GridContainer" type="GridContainer" parent="Debugging/DebugTools"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="RefreshApps" type="Button" parent="DebugTools/GridContainer"]
-margin_right = 256.0
-margin_bottom = 29.0
-text = "Refresh Installed Apps"
-
-[node name="WriteInstalledApps" type="Button" parent="DebugTools/GridContainer"]
-margin_top = 33.0
-margin_right = 256.0
-margin_bottom = 62.0
-text = "Write Installed Apps"
-
-[node name="OpenApp" type="Button" parent="DebugTools/GridContainer"]
+[node name="OpenApp" type="Button" parent="Debugging/DebugTools/GridContainer"]
 margin_top = 66.0
 margin_right = 256.0
 margin_bottom = 95.0
 size_flags_horizontal = 3
 text = "Open App"
 
-[connection signal="pressed" from="StartMenu/VBoxContainer/DownloadApps" to="." method="_on_DownloadApps_pressed"]
-[connection signal="pressed" from="StartMenu/VBoxContainer/UpdateApps" to="." method="_on_UpdateApps_pressed"]
-[connection signal="pressed" from="StartMenu/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="mouse_entered" from="StartButton/Button" to="." method="_on_StartButton_mouse_entered"]
-[connection signal="mouse_exited" from="StartButton/Button" to="." method="_on_StartButton_mouse_exited"]
-[connection signal="toggled" from="StartButton/Button" to="." method="_on_StartButton_toggled"]
-[connection signal="pressed" from="DebugTools/GridContainer/RefreshApps" to="." method="_on_RefreshApps_pressed"]
-[connection signal="pressed" from="DebugTools/GridContainer/WriteInstalledApps" to="." method="_on_WriteInstalledApps_pressed"]
-[connection signal="pressed" from="DebugTools/GridContainer/OpenApp" to="." method="_on_OpenApp_pressed"]
+[connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/DownloadApps" to="." method="_on_DownloadApps_pressed"]
+[connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/UpdateApps" to="." method="_on_UpdateApps_pressed"]
+[connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="mouse_entered" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_mouse_entered"]
+[connection signal="mouse_exited" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_mouse_exited"]
+[connection signal="toggled" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_toggled"]
+[connection signal="pressed" from="Debugging/DebugTools/GridContainer/OpenApp" to="." method="_on_OpenApp_pressed"]
