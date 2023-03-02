@@ -10,3 +10,5 @@
 ## Supported Platforms
 * Windows
 * Linux/X11 (NOT TESTED)
+* macOS
+* Android
