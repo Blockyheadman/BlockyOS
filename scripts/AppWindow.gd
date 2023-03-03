@@ -90,26 +90,24 @@ func _process(_delta):
 		#rect_position = Vector2(0,20)
 		if rect_position.x != 0 and mouse_clicked:
 			print("unsnapping left.")
+			snapped_left = false
 			var tween = get_tree().create_tween()
 			tween.set_ease(Tween.EASE_OUT)
 			tween.set_trans(Tween.TRANS_CUBIC)
 			tween.tween_property(self, "rect_size", prev_size, 0.5)
 			self.resizable = true
-			yield(get_tree().create_timer(0.5), "timeout")
-			snapped_left = false
 	
 	elif snapped_right == true && max_anim_done == true:
 		$WindowRaiser.visible = false
 		#rect_position = Vector2(get_viewport_rect().size.x/2,20)
 		if rect_position.x != get_viewport_rect().size.x/2 and mouse_clicked:
-			print("unsnapping left.")
+			print("unsnapping right.")
+			snapped_right = false
 			var tween = get_tree().create_tween()
 			tween.set_ease(Tween.EASE_OUT)
 			tween.set_trans(Tween.TRANS_CUBIC)
 			tween.tween_property(self, "rect_size", prev_size, 0.5)
 			self.resizable = true
-			yield(get_tree().create_timer(0.5), "timeout")
-			snapped_right = false
 	
 	if snap_primed and mouse_clicked:
 		if rect_position.x < 0 or rect_position.x + rect_size.x > get_viewport_rect().size.x:
@@ -124,6 +122,7 @@ func _process(_delta):
 			tween.tween_property($SnapPanel, "modulate", Color(1,1,1,0), 0.75)
 			snap_primed = false
 			snap_priming = false
+			$SnapTimer.stop()
 	
 	if !maximized and !snapped_left and !snapped_right:
 		$WindowRaiser.visible = true
@@ -143,7 +142,6 @@ func _process(_delta):
 		tween.set_trans(Tween.TRANS_CUBIC)
 		tween.tween_property($WindowRaiser, "modulate", Color(1,1,1,1), 0.75)
 	else:
-		move_child(get_node("WindowRaiser"), 0)
 		var tween = get_tree().create_tween()
 		tween.set_ease(Tween.EASE_OUT)
 		tween.set_trans(Tween.TRANS_CUBIC)
