@@ -47,7 +47,8 @@ func _ready():
 func _input(event):
 	if event is InputEventKey:
 		if event.scancode == 16777254:
-			OS.window_fullscreen = !OS.window_fullscreen
+			if !event.pressed:
+				OS.window_fullscreen = !OS.window_fullscreen
 	
 	if event is InputEventMouse:
 		if event.position.x >= 0 and event.position.y >= $MenuBar/StartButton.rect_position.y:
