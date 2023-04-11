@@ -9,6 +9,6 @@
 
 ## Supported Platforms
 * Windows
-* Linux/X11 (NOT TESTED)
+* Linux/X11
 * macOS
 * Android
