@@ -1,10 +1,23 @@
 extends Node
 
 # Globals variables for system settings
-var fling_enabled = true
-var bg_window_effect = false
-var window_snap = true
-var csec_enabled = false
+var fling_enabled := true
+var bg_window_effect := false
+var window_snap := true
+var csec_enabled := false
+
+var verison_major : int = 1
+var verison_minor : int = 1
+var verison_revision : int = 3
+var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
+
+var online_version
+var online_ver_major
+var online_ver_minor
+var online_ver_rev
+
+var downloaded_file_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/file.txt"
+var download_status : int = -1
 
 # Global variables for system events.
 var start_menu_shown = false
@@ -59,3 +72,34 @@ func load_settings():
 		csec_enabled = node_data["clock_seconds_enabled"]
 
 	save.close()
+
+# 1 means it failed to download without a reason, 2 means it's already downloading a file
+func download_file(file_url : String, file_destination : String):
+	if get_child(0) is HTTPRequest:
+		OS.alert("We can only download one file a time right now. Sorry!", "Woah there!")
+		return 2
+	else:
+		download_status = -1
+		downloaded_file_path = file_destination
+		var http_request = HTTPRequest.new()
+		add_child(http_request, true)
+		http_request.connect("request_completed", self, "_http_request_completed")
+	
+		var error = http_request.request(file_url)
+		return OK
+		if error != OK:
+			OS.alert("HTTP Request failed to reach. Error code " + str(error), "Woah there!")
+			return 1
+
+func _http_request_completed(result, response_code, _headers, body):
+	if result == 0:
+		if response_code == 200:
+			var app = File.new()
+			app.open(downloaded_file_path, File.WRITE)
+			app.store_buffer(body)
+			app.close()
+			download_status = OK
+		else:
+			download_status = response_code
+	else:
+		download_status = result

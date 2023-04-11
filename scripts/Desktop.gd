@@ -12,7 +12,6 @@ var menu_button_anim_done := true
 var time = Time.get_time_string_from_system()
 
 func _ready():
-	#OS.window_size = Vector2(1792, 1008)
 	Global.load_settings()
 	
 	$MenuBar/StartMenu/VBoxContainer/DownloadApps.queue_free()
@@ -23,6 +22,9 @@ func _ready():
 		$Debugging/DebugTools.visible = true
 	elif OS.has_feature("release"):
 		$Debugging/DebugTools.queue_free()
+	
+	if OS.get_name() == "HTML5":
+		$MenuBar/StartMenu/VBoxContainer/UpdateDownloader.queue_free()
 	
 	#$Debugging/DebugTools.queue_free()
 	
@@ -106,12 +108,13 @@ func refresh_app_list():
 		print("Grabbing files from: " + user_path + "/apps/" + node_data)
 		var app_dir = File.new()
 		if app_dir.file_exists(user_path + "/apps/" + node_data + ".pck"):
-			print("Node Name: " + str(get_node("Apps/AppsGridContainer").get_child(array_line)))
+			
 			#if !get_node("AppsGridContainer").get_child(array_line):
 			if !has_node("Apps/AppsGridContainer/" + node_data):
 				var button_scene = load("res://scenes/AppButton.tscn")
 				var instanced_button : Node = button_scene.instance()
 				get_node("Apps/AppsGridContainer").add_child(instanced_button)
+				print("Node Name: " + str(get_node("Apps/AppsGridContainer").get_child(array_line).name))
 				instanced_button.name = node_data
 				instanced_button.get_child(0).get_child(1).text = node_data
 				instanced_button.get_child(0).get_child(0).flat = true
@@ -153,17 +156,14 @@ func _on_button_pressed(button):
 				app_node = app_node_scene.instance()
 				print("\n" + str(app_node))
 				open_app(app_node, pressed_button)
-			else:
-				printerr("The file, 'res://" + pressed_button + "/Main.tscn' doesn't exist skipping opening app.")
-			
-			if pck_file.file_exists("res://" + pressed_button + "/scenes/Main.tscn"):
+			elif pck_file.file_exists("res://" + pressed_button + "/scenes/Main.tscn"):
 				app_node_scene = load("res://" + str(pressed_button) + "/scenes/Main.tscn")
 				print("\n" + str(app_node_scene))
 				app_node = app_node_scene.instance()
 				print("\n" + str(app_node))
 				open_app(app_node, pressed_button)
 			else:
-				printerr("The file, 'res://" + pressed_button + "/scenes/Main.tscn' doesn't exist skipping opening app.")
+				printerr("The " + pressed_button + " 'Main.tscn' file doesn't exist. Skipping opening app.")
 			
 		else:
 			printerr("Failed to load pck file.")
@@ -487,6 +487,25 @@ func _on_UpdateApps_pressed():
 	
 	update_apps()
 
+func _on_UpdateDownloader_pressed():
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
+	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
+	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
+	$MenuBar/StartButton/Button.pressed = false
+	
+	var icon = load("res://resources/textures/Update.png")
+	var app_node_scene
+	var app_node
+	app_node_scene = load("res://scenes/UpdateDownloader.tscn")
+	print("\n" + str(app_node_scene))
+	app_node = app_node_scene.instance()
+	print("\n" + str(app_node))
+	
+	open_built_in_app(app_node, "Update Downloader", icon)
+
 func _on_Settings_pressed():
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
@@ -505,3 +524,15 @@ func _on_Settings_pressed():
 	print("\n" + str(app_node))
 	
 	open_built_in_app(app_node, "Settings", icon)
+
+func _on_HTTPTest_pressed():
+	var icon = load("res://resources/textures/Settings.png")
+	var app_node_scene
+	var app_node
+	app_node_scene = load("res://scenes/UpdateDownloader.tscn")
+	print("\n" + str(app_node_scene))
+	app_node = app_node_scene.instance()
+	print("\n" + str(app_node))
+	
+	open_built_in_app(app_node, "Update Downloader", icon)
+

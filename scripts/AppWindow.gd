@@ -1,4 +1,5 @@
 extends WindowDialog
+class_name AppWindow
 
 signal window_closed
 signal window_hidden
@@ -21,6 +22,8 @@ var window_resizing = false
 
 var mouse_clicked = false
 
+var window_min_size = Vector2(272,160)
+
 func _ready():
 	modulate = Color(0,0,0,0)
 # warning-ignore:return_value_discarded
@@ -33,6 +36,7 @@ func _ready():
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.connect("finished", self, "set_window_min_size", [false])
 	#tween.tween_property(self, "rect_position", Vector2((get_viewport_rect().size.x/2)-self.rect_size.x/0.89, (get_viewport_rect().size.y/3)/1.22), 0.75)
 	tween.tween_property(self, "rect_position", Vector2(self.rect_position.x-152, self.rect_position.y-158), 0.75)
 	tween.parallel().tween_property(self, "rect_size", Vector2(544, 320), 0.75)
@@ -40,6 +44,12 @@ func _ready():
 	
 	if !OS.has_feature("debug"):
 		$DebugLabel.queue_free()
+
+func set_window_min_size(reset : bool):
+	print("setting window min size.")
+	rect_min_size = window_min_size
+	if reset:
+		rect_min_size = Vector2(0,0)
 
 func _process(_delta):
 	#print("Window State: " + str(minimized))
@@ -249,7 +259,12 @@ func _on_SnapTimer_timeout():
 	
 	$SnapPanel.raise()
 
+func close_window():
+	yield(get_tree().create_timer(0.15), "timeout")
+	_on_CloseButton_pressed()
+
 func _on_CloseButton_pressed():
+	set_window_min_size(true)
 	#maximized = false
 	print("emitting signal with parameter " + self.name)
 	emit_signal("window_closed", self.name)
@@ -258,24 +273,16 @@ func _on_CloseButton_pressed():
 	snapped_left = false
 	snapped_right = false
 	
-	if maximized == false:
-		var tween = get_tree().create_tween()
-		tween.set_ease(Tween.EASE_OUT)
-		tween.set_trans(Tween.TRANS_CUBIC)
-		tween.connect("finished", self, "close_anim_done")
-		tween.tween_property(self, "rect_position", Vector2(self.rect_position.x+prev_size.x/3.6, self.rect_position.y+prev_size.y/3.6), 0.75)
-		tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
-		tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
-	elif maximized == true:
-		var tween = get_tree().create_tween()
-		tween.set_ease(Tween.EASE_OUT)
-		tween.set_trans(Tween.TRANS_CUBIC)
-		tween.connect("finished", self, "close_anim_done")
-		tween.tween_property(self, "rect_position", Vector2(get_viewport_rect().size.x/2-prev_size.x/3.6, get_viewport_rect().size.y/2-prev_size.y/3.6), 0.75)
-		tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
-		tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.connect("finished", self, "close_anim_done")
+	tween.tween_property(self, "rect_position", Vector2((self.rect_position.x+self.rect_size.x/2)-120, (self.rect_position.y+self.rect_size.y/2)-20), 0.75)
+	tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
+	tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
 
 func close_window_left():
+	set_window_min_size(true)
 	maximized = false
 	print("emitting signal with parameter " + self.name)
 	emit_signal("window_closed", self.name)
@@ -284,11 +291,12 @@ func close_window_left():
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.connect("finished", self, "close_anim_done")
-	tween.tween_property(self, "rect_position", Vector2(0-self.rect_size.x, self.rect_position.y+158), 0.75)
+	tween.tween_property(self, "rect_position", Vector2(0-self.rect_size.x, (self.rect_position.y+self.rect_size.y/2)-20), 0.75)
 	tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
 	tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
 
 func close_window_right():
+	set_window_min_size(true)
 	maximized = false
 	print("emitting signal with parameter " + self.name)
 	emit_signal("window_closed", self.name)
@@ -297,7 +305,7 @@ func close_window_right():
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.connect("finished", self, "close_anim_done")
-	tween.tween_property(self, "rect_position", Vector2(get_viewport_rect().size.x+self.rect_size.x, self.rect_position.y+158), 0.75)
+	tween.tween_property(self, "rect_position", Vector2(get_viewport_rect().size.x+self.rect_size.x, (self.rect_position.y+self.rect_size.y/2)-20), 0.75)
 	tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
 	tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
 
@@ -376,7 +384,7 @@ func _on_MinimizeButton_pressed():
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.connect("finished", self, "minimize_anim_done")
-	tween.tween_property(self, "rect_position", Vector2(self.rect_position.x+152, get_viewport_rect().size.y), 0.75)
+	tween.tween_property(self, "rect_position", Vector2((self.rect_position.x+self.rect_size.x/2)-120, get_viewport_rect().size.y), 0.75)
 	tween.parallel().tween_property(self, "rect_size", Vector2(240, 0), 0.75)
 	tween.parallel().tween_property(self, "modulate", Color(1,1,1,0), 0.75)
 	
