@@ -1,0 +1,181 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/UpdateDownloader.gd" type="Script" id=1]
+[ext_resource path="res://resources/fonts/ariblk.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=5]
+size = 20
+outline_size = 1
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.679688, 0.679688, 0.679688, 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 2 )
+
+[node name="UpdateDownloader" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.74902, 0.74902, 0.74902, 1 )
+
+[node name="VersionSelector" type="MarginContainer" parent="."]
+anchor_left = 0.012
+anchor_top = 0.022
+anchor_right = 0.987
+anchor_bottom = 0.989
+margin_left = 0.639999
+margin_top = 0.16
+margin_right = 0.640015
+margin_bottom = -0.0800171
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector"]
+margin_right = 1248.0
+margin_bottom = 696.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VersionSelector/VBoxContainer"]
+margin_right = 1248.0
+margin_bottom = 665.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer"]
+margin_right = 1248.0
+margin_bottom = 665.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TitleCenter" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 1248.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="TitleLabel" type="Label" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/TitleCenter"]
+margin_left = 552.0
+margin_right = 696.0
+margin_bottom = 30.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "Hello User! :)"
+
+[node name="InfoLabel" type="Label" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 1248.0
+margin_bottom = 83.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+text = "Select a Version of BlockyOS to download below.
+We'll do the rest of the work for you."
+align = 1
+autowrap = true
+
+[node name="MainContainer" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 87.0
+margin_right = 1248.0
+margin_bottom = 87.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer"]
+margin_left = 624.0
+margin_right = 624.0
+
+[node name="DescriptionLabel" type="Label" parent="VersionSelector/VBoxContainer"]
+margin_top = 669.0
+margin_right = 1248.0
+margin_bottom = 696.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "BlockyOS Update Downloader | Blockyheadman
+Powered Pridefully by Godot Game Engine"
+align = 1
+autowrap = true
+
+[node name="Await" type="MarginContainer" parent="."]
+visible = false
+anchor_left = 0.012
+anchor_top = 0.022
+anchor_right = 0.987
+anchor_bottom = 0.989
+margin_left = 0.639999
+margin_top = 0.16
+margin_right = 0.640015
+margin_bottom = -0.0800171
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Await"]
+margin_right = 1248.0
+margin_bottom = 696.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Await/VBoxContainer"]
+margin_right = 1248.0
+margin_bottom = 680.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Await/VBoxContainer/ScrollContainer"]
+margin_right = 1248.0
+margin_bottom = 680.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TitleCenter" type="CenterContainer" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 1248.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="TitleLabel" type="Label" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer/TitleCenter"]
+margin_left = 546.0
+margin_right = 701.0
+margin_bottom = 30.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "Hello There! :)"
+
+[node name="InfoLabel" type="Label" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 1248.0
+margin_bottom = 83.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+text = "We are currently downloading and installing your version of BlockyOS.
+Stay tuned for greatness!"
+align = 1
+autowrap = true
+
+[node name="MainContainer" type="CenterContainer" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 87.0
+margin_right = 1248.0
+margin_bottom = 87.0
+size_flags_horizontal = 3
+
+[node name="DescriptionLabel" type="Label" parent="Await/VBoxContainer"]
+margin_top = 684.0
+margin_right = 1248.0
+margin_bottom = 696.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "If you close this window, the download will finish but not automatically open"
+align = 1
+autowrap = true
+
+[node name="FileChecker" type="HTTPRequest" parent="."]
+
+[connection signal="request_completed" from="FileChecker" to="." method="_on_FileChecker_request_completed"]

@@ -243,7 +243,7 @@ margin_bottom = 696.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
-text = "BlockyOS Beta Version 1.1.0 | Blockyheadman
+text = "BlockyOS Version 1.1.1 | Blockyheadman
 Powered Pridefully by Godot Game Engine"
 align = 1
 autowrap = true
