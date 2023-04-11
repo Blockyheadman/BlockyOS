@@ -8,13 +8,29 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "WindowDialog",
+"class": "AppWindow",
+"language": "GDScript",
+"path": "res://scripts/AppWindow.gd"
+}, {
+"base": "HBoxContainer",
+"class": "BOSVersionButton",
+"language": "GDScript",
+"path": "res://scripts/BOSVersionButton.gd"
+} ]
+_global_script_class_icons={
+"AppWindow": "",
+"BOSVersionButton": ""
+}
+
 [application]
 
-config/name="BlockyOS (Beta)"
+config/name="BlockyOS"
 config/description="A dumb little OS made with Godot"
 run/main_scene="res://scenes/Desktop.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="BlockyOS Beta"
+config/custom_user_dir_name="BlockyOS"
 boot_splash/image="res://resources/icons/BlockyOS.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0, 0.427451, 0.27451, 1 )
