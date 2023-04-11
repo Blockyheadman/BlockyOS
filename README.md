@@ -1,5 +1,6 @@
 # BlockyOS
 ### A dumb little OS made with Godot
+![BlockyOS Icon](resources/icons/BlockyOS.png)
 
 ## Features
 * A Desktop with an apps panel
