@@ -7,6 +7,7 @@
 * Smooth animations for everything
 * Feel-good window system
 * Apps support
+* Update Downloader
 
 ## Supported Platforms
 * Windows
