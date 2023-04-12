@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/UpdateDownloader.gd" type="Script" id=1]
 [ext_resource path="res://resources/fonts/ariblk.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://resources/textures/loading.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=5]
 size = 20
@@ -29,49 +30,47 @@ anchor_bottom = 1.0
 color = Color( 0.74902, 0.74902, 0.74902, 1 )
 
 [node name="VersionSelector" type="MarginContainer" parent="."]
-anchor_left = 0.012
-anchor_top = 0.022
-anchor_right = 0.987
-anchor_bottom = 0.989
-margin_left = 0.639999
-margin_top = 0.16
-margin_right = 0.640015
-margin_bottom = -0.0800171
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector"]
-margin_right = 1248.0
-margin_bottom = 696.0
+margin_right = 1264.0
+margin_bottom = 704.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VersionSelector/VBoxContainer"]
-margin_right = 1248.0
-margin_bottom = 665.0
+margin_right = 1264.0
+margin_bottom = 673.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer"]
-margin_right = 1248.0
-margin_bottom = 665.0
+margin_right = 1264.0
+margin_bottom = 673.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TitleCenter" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_right = 1248.0
+margin_right = 1264.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
 
 [node name="TitleLabel" type="Label" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/TitleCenter"]
-margin_left = 552.0
-margin_right = 696.0
+margin_left = 512.0
+margin_right = 751.0
 margin_bottom = 30.0
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
-text = "Hello User! :)"
+text = "Looking for a change?"
 
 [node name="InfoLabel" type="Label" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 34.0
-margin_right = 1248.0
+margin_right = 1264.0
 margin_bottom = 83.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -84,18 +83,18 @@ autowrap = true
 
 [node name="MainContainer" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 87.0
-margin_right = 1248.0
+margin_right = 1264.0
 margin_bottom = 87.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer"]
-margin_left = 624.0
-margin_right = 624.0
+margin_left = 632.0
+margin_right = 632.0
 
 [node name="DescriptionLabel" type="Label" parent="VersionSelector/VBoxContainer"]
-margin_top = 669.0
-margin_right = 1248.0
-margin_bottom = 696.0
+margin_top = 677.0
+margin_right = 1264.0
+margin_bottom = 704.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
@@ -106,49 +105,47 @@ autowrap = true
 
 [node name="Await" type="MarginContainer" parent="."]
 visible = false
-anchor_left = 0.012
-anchor_top = 0.022
-anchor_right = 0.987
-anchor_bottom = 0.989
-margin_left = 0.639999
-margin_top = 0.16
-margin_right = 0.640015
-margin_bottom = -0.0800171
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Await"]
-margin_right = 1248.0
-margin_bottom = 696.0
+margin_right = 1264.0
+margin_bottom = 704.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Await/VBoxContainer"]
-margin_right = 1248.0
-margin_bottom = 680.0
+margin_right = 1264.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Await/VBoxContainer/ScrollContainer"]
-margin_right = 1248.0
-margin_bottom = 680.0
+margin_right = 1264.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TitleCenter" type="CenterContainer" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_right = 1248.0
+margin_right = 1264.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
 
 [node name="TitleLabel" type="Label" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer/TitleCenter"]
-margin_left = 546.0
-margin_right = 701.0
+margin_left = 574.0
+margin_right = 690.0
 margin_bottom = 30.0
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
-text = "Hello There! :)"
+text = "Found it! :)"
 
 [node name="InfoLabel" type="Label" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 34.0
-margin_right = 1248.0
+margin_right = 1264.0
 margin_bottom = 83.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -161,14 +158,22 @@ autowrap = true
 
 [node name="MainContainer" type="CenterContainer" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 87.0
-margin_right = 1248.0
-margin_bottom = 87.0
+margin_right = 1264.0
+margin_bottom = 215.0
 size_flags_horizontal = 3
 
+[node name="LoadingIcon" type="TextureRect" parent="Await/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer"]
+margin_left = 568.0
+margin_right = 696.0
+margin_bottom = 128.0
+rect_pivot_offset = Vector2( 64, 64 )
+size_flags_horizontal = 5
+texture = ExtResource( 3 )
+
 [node name="DescriptionLabel" type="Label" parent="Await/VBoxContainer"]
-margin_top = 684.0
-margin_right = 1248.0
-margin_bottom = 696.0
+margin_top = 692.0
+margin_right = 1264.0
+margin_bottom = 704.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
@@ -176,6 +181,70 @@ text = "If you close this window, the download will finish but not automatically
 align = 1
 autowrap = true
 
+[node name="Error" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Error"]
+margin_right = 1264.0
+margin_bottom = 704.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Error/VBoxContainer"]
+margin_right = 1264.0
+margin_bottom = 688.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Error/VBoxContainer/ScrollContainer"]
+margin_right = 1264.0
+margin_bottom = 688.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TitleCenter" type="CenterContainer" parent="Error/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 1264.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="TitleLabel" type="Label" parent="Error/VBoxContainer/ScrollContainer/VBoxContainer/TitleCenter"]
+margin_left = 586.0
+margin_right = 678.0
+margin_bottom = 30.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "Uh oh! :("
+
+[node name="InfoLabel" type="Label" parent="Error/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 1264.0
+margin_bottom = 57.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+text = "There seems to have been a problem here.."
+align = 1
+autowrap = true
+
+[node name="DescriptionLabel" type="Label" parent="Error/VBoxContainer"]
+margin_top = 692.0
+margin_right = 1264.0
+margin_bottom = 704.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Error Code ????"
+align = 1
+autowrap = true
+
 [node name="FileChecker" type="HTTPRequest" parent="."]
+timeout = 20.0
 
 [connection signal="request_completed" from="FileChecker" to="." method="_on_FileChecker_request_completed"]
