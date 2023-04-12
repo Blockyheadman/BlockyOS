@@ -22,7 +22,12 @@ var window_resizing = false
 
 var mouse_clicked = false
 
-var window_min_size = Vector2(272,160)
+var open_size := Vector2(544, 320)
+var window_min_size := Vector2(272,160)
+
+var disable_fling_max := false
+var disable_fling_min := false
+var disable_fling_close := false
 
 func _ready():
 	modulate = Color(0,0,0,0)
@@ -38,8 +43,8 @@ func _ready():
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.connect("finished", self, "set_window_min_size", [false])
 	#tween.tween_property(self, "rect_position", Vector2((get_viewport_rect().size.x/2)-self.rect_size.x/0.89, (get_viewport_rect().size.y/3)/1.22), 0.75)
-	tween.tween_property(self, "rect_position", Vector2(self.rect_position.x-152, self.rect_position.y-158), 0.75)
-	tween.parallel().tween_property(self, "rect_size", Vector2(544, 320), 0.75)
+	tween.tween_property(self, "rect_position", Vector2((get_viewport_rect().size.x/2)-(open_size.x/2), (get_viewport_rect().size.y/2)-(open_size.y/2)), 0.75)
+	tween.parallel().tween_property(self, "rect_size", open_size, 0.75)
 	tween.parallel().tween_property(self, "modulate", Color(1,1,1,1), 0.5)
 	
 	if !OS.has_feature("debug"):
@@ -219,13 +224,13 @@ func _gui_input(event):
 						window_resizing = false
 			
 			if event.is_action_released("LMB"):
-				if fling_speed.y <= -15:
+				if fling_speed.y <= -15 and !disable_fling_max:
 					_on_MaximizeButton_pressed()
-				elif fling_speed.y >= 15:
+				elif fling_speed.y >= 15 and !disable_fling_min:
 					_on_MinimizeButton_pressed()
-				elif fling_speed.x >= 15:
+				elif fling_speed.x >= 15 and !disable_fling_close:
 					close_window_right()
-				elif fling_speed.x <= -15:
+				elif fling_speed.x <= -15 and !disable_fling_close:
 					close_window_left()
 			
 			if event is InputEventScreenTouch:

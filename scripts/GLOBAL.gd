@@ -8,7 +8,7 @@ var csec_enabled := false
 
 var verison_major : int = 1
 var verison_minor : int = 1
-var verison_revision : int = 3
+var verison_revision : int = 4
 var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
 
 var online_version
@@ -18,6 +18,8 @@ var online_ver_rev
 
 var downloaded_file_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/file.txt"
 var download_status : int = -1
+
+var http_request
 
 # Global variables for system events.
 var start_menu_shown = false
@@ -75,21 +77,28 @@ func load_settings():
 
 # 1 means it failed to download without a reason, 2 means it's already downloading a file
 func download_file(file_url : String, file_destination : String):
-	if get_child(0) is HTTPRequest:
-		OS.alert("We can only download one file a time right now. Sorry!", "Woah there!")
+	if http_request:
+		#OS.alert("We can only download one file a time right now. Sorry!", "Woah there!")
 		return 2
 	else:
-		download_status = -1
-		downloaded_file_path = file_destination
-		var http_request = HTTPRequest.new()
-		add_child(http_request, true)
-		http_request.connect("request_completed", self, "_http_request_completed")
-	
-		var error = http_request.request(file_url)
-		return OK
-		if error != OK:
-			OS.alert("HTTP Request failed to reach. Error code " + str(error), "Woah there!")
-			return 1
+		if OS.get_name() != "HTML5":
+			download_status = -1
+			downloaded_file_path = file_destination
+			http_request = HTTPRequest.new()
+			add_child(http_request, true)
+			http_request.connect("request_completed", self, "_http_request_completed")
+		
+			var error = http_request.request(file_url)
+			return OK
+			if error != OK:
+				#OS.alert("HTTP Request failed to request the file. Error code " + str(error), "Woah there!")
+				http_request.queue_free()
+				http_request = null
+				return 1
+		else:
+			http_request.queue_free()
+			http_request = null
+			return 2046 # this means incompatable platform
 
 func _http_request_completed(result, response_code, _headers, body):
 	if result == 0:
@@ -98,8 +107,14 @@ func _http_request_completed(result, response_code, _headers, body):
 			app.open(downloaded_file_path, File.WRITE)
 			app.store_buffer(body)
 			app.close()
+			http_request.queue_free()
+			http_request = null
 			download_status = OK
 		else:
+			http_request.queue_free()
+			http_request = null
 			download_status = response_code
 	else:
+		http_request.queue_free()
+		http_request = null
 		download_status = result
