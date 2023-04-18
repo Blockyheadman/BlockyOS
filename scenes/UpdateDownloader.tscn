@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/UpdateDownloader.gd" type="Script" id=1]
 [ext_resource path="res://resources/fonts/ariblk.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://resources/textures/loading.png" type="Texture" id=3]
+[ext_resource path="res://resources/presets/StartMenuButton.tres" type="Theme" id=4]
+[ext_resource path="res://resources/presets/LineEdit.tres" type="Theme" id=5]
+[ext_resource path="res://resources/presets/FileDialog.tres" type="Theme" id=6]
 
 [sub_resource type="DynamicFont" id=5]
 size = 20
@@ -13,7 +16,10 @@ font_data = ExtResource( 2 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxFlat" id=7]
-bg_color = Color( 0.679688, 0.679688, 0.679688, 1 )
+bg_color = Color( 0.678431, 0.678431, 0.678431, 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.678431, 0.678431, 0.678431, 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 8
@@ -81,10 +87,47 @@ We'll do the rest of the work for you."
 align = 1
 autowrap = true
 
-[node name="MainContainer" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 87.0
 margin_right = 1264.0
-margin_bottom = 87.0
+margin_bottom = 143.0
+
+[node name="DLLLabel" type="Label" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer"]
+margin_right = 1264.0
+margin_bottom = 23.0
+size_flags_horizontal = 7
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_styles/normal = SubResource( 8 )
+text = "Download location: "
+align = 1
+
+[node name="DLLLoc" type="HBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer"]
+margin_top = 27.0
+margin_right = 1264.0
+margin_bottom = 56.0
+
+[node name="DLLEdit" type="LineEdit" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/DLLLoc"]
+margin_right = 630.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+theme = ExtResource( 5 )
+text = "[OS Downloads Page]"
+align = 1
+placeholder_text = "Empty will result in downloads path"
+caret_blink = true
+
+[node name="PickLoc" type="Button" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/DLLLoc"]
+margin_left = 634.0
+margin_right = 1264.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+theme = ExtResource( 4 )
+text = "Pick Download Location"
+
+[node name="MainContainer" type="CenterContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 147.0
+margin_right = 1264.0
+margin_bottom = 147.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer"]
@@ -244,7 +287,20 @@ text = "Error Code ????"
 align = 1
 autowrap = true
 
+[node name="DownloadLoc" type="FileDialog" parent="."]
+anchor_left = 0.275
+anchor_top = 0.25
+anchor_right = 0.725
+anchor_bottom = 0.75
+margin_bottom = -6.10352e-05
+theme = ExtResource( 6 )
+window_title = "Open a Directory"
+mode = 2
+access = 2
+
 [node name="FileChecker" type="HTTPRequest" parent="."]
 timeout = 20.0
 
+[connection signal="pressed" from="VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/DLLLoc/PickLoc" to="." method="_on_PickLoc_pressed"]
+[connection signal="dir_selected" from="DownloadLoc" to="." method="_on_DownloadLoc_dir_selected"]
 [connection signal="request_completed" from="FileChecker" to="." method="_on_FileChecker_request_completed"]
