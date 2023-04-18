@@ -2,8 +2,12 @@ extends Control
 
 onready var version_container = $VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/VBoxContainer
 onready var file_checker = $FileChecker
+onready var dll_edit = $VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/DLLLoc/DLLEdit
+
+onready var download_loc = $DownloadLoc
 
 var download_version : String
+var download_location := str(OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS))
 var app_versions : Array
 
 var await_finished := false
@@ -11,8 +15,8 @@ var await_finished := false
 func _ready():
 	if get_parent() is AppWindow:
 		get_parent().window_min_size = Vector2(320,300)
-	
 	set_process(false)
+	dll_edit.text = str(OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS))
 	
 	file_checker.request("https://raw.githubusercontent.com/Blockyheadman/BlockyOS/main/versions.json")
 
@@ -22,20 +26,23 @@ func _exit_tree():
 		Global.http_request = null
 
 func set_app_data(app_ver : String):
+	var error
 	if OS.get_name() == "Windows":
 		download_version = "https://github.com/Blockyheadman/BlockyOS/releases/download/v" + app_ver + "/BlockyOS.exe"
+		error = Global.download_file(download_version, download_location + "/BlockyOS.exe")
 	elif OS.get_name() == "X11":
 		download_version = "https://github.com/Blockyheadman/BlockyOS/releases/download/v" + app_ver + "/BlockyOS.x86_64"
+		error = Global.download_file(download_version, download_location + "/BlockyOS.x86_64")
 	elif OS.get_name() == "OSX":
 		download_version = "https://github.com/Blockyheadman/BlockyOS/releases/download/v" + app_ver + "/BlockyOS.zip"
+		error = Global.download_file(download_version, download_location + "/BlockyOS.zip")
 	elif OS.get_name() == "Android":
 		download_version = "https://github.com/Blockyheadman/BlockyOS/releases/download/v" + app_ver + "/BlockyOS.apk"
+		error = Global.download_file(download_version, download_location + "/BlockyOS.apk")
 	else:
 		show_error_screen("App cannot be installed on this device.. So how did you get this error?..", "2046")
 		return
 	print(download_version)
-	
-	var error = Global.download_file(download_version, OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/BlockyOS.exe")
 	print(error)
 	if error != OK:
 		if error == 1:
@@ -135,3 +142,13 @@ func show_error_screen(info_text : String, error_code : String):
 	tween.parallel().tween_property($Error, "modulate", Color(1,1,1,1), 1.5)
 	tween.parallel().tween_property(get_parent(), "rect_size", Vector2(544, 320), 1.5)
 	tween.parallel().tween_property(get_parent(), "window_min_size", Vector2(320, 330), 1.5)
+
+func _on_PickLoc_pressed():
+	download_loc.current_dir = download_location
+	download_loc.current_path = download_location
+	download_loc.popup_centered(Vector2(576, 360))
+
+func _on_DownloadLoc_dir_selected(dir : String):
+	download_location = dir
+	download_loc.current_path = dir
+	dll_edit.text = dir

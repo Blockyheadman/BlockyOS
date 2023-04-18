@@ -8,7 +8,7 @@ var csec_enabled := false
 
 var verison_major : int = 1
 var verison_minor : int = 1
-var verison_revision : int = 4
+var verison_revision : int = 5
 var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
 
 var online_version
