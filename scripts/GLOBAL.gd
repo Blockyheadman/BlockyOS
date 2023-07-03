@@ -14,7 +14,7 @@ var verison_major : int = 1
 var verison_minor : int = 2
 var verison_revision : int = 0
 var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
-var version_state : String = "Multi.Developer.Alpha"
+var version_state : String = "Stable"
 
 var online_version
 var online_ver_major
