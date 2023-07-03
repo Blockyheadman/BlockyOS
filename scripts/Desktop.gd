@@ -2,8 +2,8 @@ extends Control
 
 signal close_app_window_button
 
-var window_anim_playable = true
-var user_path = OS.get_user_data_dir()
+var window_anim_playable := true
+var user_path := OS.get_user_data_dir()
 var apps : Array
 
 # 0 is done. 1 is playing. 2 is ...
@@ -11,8 +11,14 @@ var menu_button_anim_done := true
 
 var time = Time.get_time_string_from_system()
 
+var peer = NetworkedMultiplayerENet.new()
+const PORT : int = 5
+const IP_ADDRESS : String = "127.0.0.1"
+
 func _ready():
-	Global.load_settings()
+	var set_error = Global.load_settings()
+	while set_error != 0:
+		set_error = Global.load_settings()
 	
 	$MenuBar/StartMenu/VBoxContainer/DownloadApps.queue_free()
 	$MenuBar/StartMenu/VBoxContainer/UpdateApps.set_v_size_flags(0)
@@ -44,7 +50,8 @@ func _ready():
 		apps_file.close()
 	update_apps()
 	print("\nApps installed: " + str(apps))
-	pass
+	
+	get_tree().connect("files_dropped", self, "dropped_files")
 
 func _input(event):
 	if event is InputEventKey:
@@ -53,15 +60,14 @@ func _input(event):
 				OS.window_fullscreen = !OS.window_fullscreen
 	
 	if event is InputEventMouse:
+		var windows_children = $Windows/WindowLayer.get_children()
 		if event.position.x >= 0 and event.position.y >= $MenuBar/StartButton.rect_position.y:
 			if event.position.x <= $MenuBar/StartButton.rect_position.x + $MenuBar/StartButton.rect_size.x:
 				if event.position.y <= $MenuBar/StartButton.rect_position.y + $MenuBar/StartButton.rect_size.y:
-					var windows_children = $Windows/WindowLayer.get_children()
 					for i in windows_children.size():
 						if !Global.start_menu_shown:
 							windows_children[i].hide()
 		else:
-			var windows_children = $Windows/WindowLayer.get_children()
 			for i in windows_children.size():
 				if !Global.start_menu_shown and windows_children[i].minimized == false:
 					windows_children[i].show()
@@ -78,6 +84,26 @@ func _process(_delta):
 			time = time.insert(time.length()-2, " ")
 	
 	$MenuBar/Clock/Label.text = time
+
+func dropped_files(files: PoolStringArray, screen: int) -> void:
+	for i in files.size():
+		if files[i].ends_with(".pck"):
+			var app_name
+			if OS.get_name() == "Windows": app_name = files[i].split("\\")
+			else: app_name = files[i].split("/")
+			app_name = app_name[app_name.size()-1]
+			print("\nImporting %s app" % app_name)
+			var file = File.new()
+			var app = File.new()
+			file.open(files[i], File.READ)
+			app.open(user_path + "/apps/" + app_name, File.WRITE)
+			
+			while file.get_position() < file.get_len():
+				app.store_64(file.get_64())
+			file.close()
+			app.close()
+			
+			update_apps()
 
 # removes all nodes from the AppsGridContainer
 func clear_app_buttons():
@@ -108,7 +134,7 @@ func refresh_app_list():
 		print("Grabbing files from: " + user_path + "/apps/" + node_data)
 		var app_dir = File.new()
 		if app_dir.file_exists(user_path + "/apps/" + node_data + ".pck"):
-			
+			app_dir.close()
 			#if !get_node("AppsGridContainer").get_child(array_line):
 			if !has_node("Apps/AppsGridContainer/" + node_data):
 				var button_scene = load("res://scenes/AppButton.tscn")
@@ -121,12 +147,19 @@ func refresh_app_list():
 				instanced_button.get_child(0).get_child(0).text = ""
 				instanced_button.get_child(0).get_child(0).hint_tooltip = str(node_data)
 				var button_image = Image.new()
-				button_image.load(get_pck_icon(node_data))
-				var button_icon = ImageTexture.new()
-				button_icon.create_from_image(button_image)
-				instanced_button.get_child(0).get_child(0).icon = button_icon
-				instanced_button.get_child(0).get_child(0).connect("button_pressed", self, "_on_button_pressed")
-				print(dir_contents("res://" + str(node_data)))
+				var error = get_pck_icon(node_data)
+				if error != "0":
+					button_image.load(error)
+					var button_icon = ImageTexture.new()
+					button_icon.create_from_image(button_image)
+					instanced_button.get_child(0).get_child(0).icon = button_icon
+					instanced_button.get_child(0).get_child(0).connect("button_pressed", self, "_on_button_pressed")
+					print(dir_contents("res://" + str(node_data)))
+				else:
+					printerr("This app is not supported or broken.")
+					var rm_file = Directory.new()
+					rm_file.remove("user://apps/" + node_data + ".pck")
+					update_apps()
 			else:
 				printerr(node_data + " button already exists. Skipping creation.")
 		else:
@@ -170,6 +203,7 @@ func _on_button_pressed(button):
 	else:
 		printerr("File doesn't exist. Not able to open.")
 		update_apps()
+	pck_file.close()
 
 # hides or shows the window when pressing the app's icon on the toolbar (OpenWindows)
 func _on_window_button_pressed(button, is_button : bool):
@@ -351,14 +385,21 @@ func dir_dirs_to_array(path):
 	return file_array
 
 # gets the app's icon saved inside the pck file
-func get_pck_icon(app_name : String):
+func get_pck_icon(app_name : String) -> String:
 	var pck_file = "user://apps/" + app_name + ".pck"
 	var err = ProjectSettings.load_resource_pack(pck_file)
 	if err == true:
 		dir_contents("res://" + app_name)
 		print("\nsuccessfully loaded pck file.")
 		print("\ngetting icon from res://" + app_name + "/" + app_name + ".png")
-		return "res://" + app_name + "/" + app_name + ".png"
+		var icon := File.new()
+		if icon.file_exists("res://" + app_name + "/" + app_name + ".png"):
+			icon.close()
+			return "res://" + app_name + "/" + app_name + ".png"
+		else:
+			icon.close()
+			return "0"
+	return "0"
 
 # connects the window's close signal to the app's toolbar icon to free it
 func _on_window_closed(app_name):
@@ -395,18 +436,6 @@ func update_apps():
 	installed_apps.close()
 	
 	refresh_app_list()
-
-# DEBUG BUTTON FUNCTIONS
-
-func _on_OpenApp_pressed():
-	var icon = load("res://resources/textures/Settings.png")
-	var app_node_scene
-	var app_node
-	app_node_scene = load("res://scenes/Settings.tscn")
-	print("\n" + str(app_node_scene))
-	app_node = app_node_scene.instance()
-	print("\n" + str(app_node))
-	open_built_in_app(app_node, "Settings", icon)
 
 # ANIMATIONS GO HERE
 func _on_StartButton_mouse_entered():
@@ -525,14 +554,49 @@ func _on_Settings_pressed():
 	
 	open_built_in_app(app_node, "Settings", icon)
 
-func _on_HTTPTest_pressed():
-	var icon = load("res://resources/textures/Settings.png")
-	var app_node_scene
-	var app_node
-	app_node_scene = load("res://scenes/UpdateDownloader.tscn")
-	print("\n" + str(app_node_scene))
-	app_node = app_node_scene.instance()
-	print("\n" + str(app_node))
-	
-	open_built_in_app(app_node, "Update Downloader", icon)
+# DEBUG BUTTON FUNCTIONS
 
+func _on_HostServer_pressed():
+	peer.close_connection()
+	
+	peer.create_server(PORT, 4)
+	get_tree().network_peer = peer
+	
+	get_tree().connect("network_peer_connected", self, "_screen_connected")
+	get_tree().connect("network_peer_disconnected", self, "_screen_disconnected")
+	
+	print("Server has been setup")
+
+func _on_JoinServer_pressed():
+	peer.close_connection()
+	
+	peer.create_client(IP_ADDRESS, PORT)
+	get_tree().network_peer = peer
+	
+	get_tree().connect("server_disconnected", self, "_host_disconnected")
+	get_tree().connect("connected_to_server", self, "_connection_ok")
+	get_tree().connect("connection_failed", self, "_connection_fail")
+	
+	print("Attempting to join Server.")
+
+# NETWORKING FUNCTIONS
+
+func _screen_connected(id):
+	print("A screen with an id of '%s' has connected!" % id)
+
+func _screen_disconnected(id):
+	print("A screen with an id of '%s' has disconnected!" % id)
+	pass
+
+func _host_disconnected():
+	OS.alert("It seems the host screen has disconnected! Quitting screen.", "Woah there!")
+	printerr("Woah there! It seems the host screen has disconnected! Quitting screen.")
+	get_tree().quit()
+
+func _connection_ok():
+	print("The connection to the server has succeeded!")
+
+func _connection_fail():
+	OS.alert("There was an issue trying to connect to the host screen.", "Oops..")
+	printerr("Oops.. There was an issue trying to connect to the host screen.")
+	peer.close_connection()

@@ -1,19 +1,13 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://resources/textures/Backgrounds/DefaultBackground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Desktop.gd" type="Script" id=2]
 [ext_resource path="res://resources/icons/BlockyOS.png" type="Texture" id=3]
-[ext_resource path="res://resources/presets/StartMenuButton.tres" type="Theme" id=4]
+[ext_resource path="res://resources/presets/GeneralButton.tres" type="Theme" id=4]
 [ext_resource path="res://resources/presets/TransparentBlack.tres" type="StyleBox" id=5]
 [ext_resource path="res://resources/textures/Download.png" type="Texture" id=6]
 [ext_resource path="res://resources/textures/Settings.png" type="Texture" id=7]
 [ext_resource path="res://resources/textures/Update.png" type="Texture" id=8]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0, 0, 0, 0.54902 )
-border_color = Color( 0, 0, 0, 0 )
-expand_margin_right = 2.0
-expand_margin_top = 2.0
 
 [node name="Desktop" type="Control"]
 anchor_right = 1.0
@@ -51,7 +45,7 @@ anchor_bottom = 1.0
 margin_top = -280.0
 margin_right = 224.0
 margin_bottom = -60.0
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
@@ -171,7 +165,6 @@ align = 1
 layer = 2
 
 [node name="Debugging" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="DebugTools" type="Control" parent="Debugging"]
 anchor_left = 1.0
@@ -190,17 +183,23 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="OpenApp" type="Button" parent="Debugging/DebugTools/GridContainer"]
+[node name="HostServer" type="Button" parent="Debugging/DebugTools/GridContainer"]
 margin_right = 256.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
-text = "Open App"
+text = "Host"
 
-[node name="HTTPTest" type="Button" parent="Debugging/DebugTools/GridContainer"]
+[node name="JoinServer" type="Button" parent="Debugging/DebugTools/GridContainer"]
 margin_top = 33.0
 margin_right = 256.0
 margin_bottom = 62.0
-text = "HTTP Test"
+text = "Join"
+
+[node name="ChangeColor" type="Button" parent="Debugging/DebugTools/GridContainer"]
+margin_top = 66.0
+margin_right = 256.0
+margin_bottom = 95.0
+text = "[ empty ]"
 
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/DownloadApps" to="." method="_on_DownloadApps_pressed"]
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/UpdateDownloader" to="." method="_on_UpdateDownloader_pressed"]
@@ -209,5 +208,5 @@ text = "HTTP Test"
 [connection signal="mouse_entered" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_mouse_entered"]
 [connection signal="mouse_exited" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_mouse_exited"]
 [connection signal="toggled" from="MenuBar/StartButton/Button" to="." method="_on_StartButton_toggled"]
-[connection signal="pressed" from="Debugging/DebugTools/GridContainer/OpenApp" to="." method="_on_OpenApp_pressed"]
-[connection signal="pressed" from="Debugging/DebugTools/GridContainer/HTTPTest" to="." method="_on_HTTPTest_pressed"]
+[connection signal="pressed" from="Debugging/DebugTools/GridContainer/HostServer" to="." method="_on_HostServer_pressed"]
+[connection signal="pressed" from="Debugging/DebugTools/GridContainer/JoinServer" to="." method="_on_JoinServer_pressed"]

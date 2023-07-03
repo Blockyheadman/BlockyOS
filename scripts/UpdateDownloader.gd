@@ -2,12 +2,12 @@ extends Control
 
 onready var version_container = $VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/VBoxContainer
 onready var file_checker = $FileChecker
-onready var dll_edit = $VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/DLLLoc/DLLEdit
+onready var selected_dll = $VersionSelector/VBoxContainer/ScrollContainer/VBoxContainer/DLLSelection/SelectedDLL
 
 onready var download_loc = $DownloadLoc
 
 var download_version : String
-var download_location := str(OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS))
+var download_location := Global.default_dl_path
 var app_versions : Array
 
 var await_finished := false
@@ -16,7 +16,7 @@ func _ready():
 	if get_parent() is AppWindow:
 		get_parent().window_min_size = Vector2(320,300)
 	set_process(false)
-	dll_edit.text = str(OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS))
+	selected_dll.text = download_location
 	
 	file_checker.request("https://raw.githubusercontent.com/Blockyheadman/BlockyOS/main/versions.json")
 
@@ -55,26 +55,25 @@ func set_app_data(app_ver : String):
 #		if get_parent() is AppWindow:
 #			set_process(false)
 #			get_parent().close_window()
-	elif error == OK:
-		#$VersionSelector.queue_free()
-		$Await.rect_position = Vector2(self.rect_size.x+8, 8)
-		$Await.modulate = Color(1,1,1,0)
-		$Await.visible = true
-		
-		var tween = get_tree().create_tween()
-		tween.set_ease(Tween.EASE_OUT)
-		tween.set_trans(Tween.TRANS_EXPO)
-		tween.connect("finished", self, "await_tween_finished")
-		tween.tween_property($VersionSelector, "rect_position", Vector2(-self.rect_size.x, 8), 1.5)
-		tween.parallel().tween_property($VersionSelector, "modulate", Color(1,1,1,0), 1.5)
-		tween.parallel().tween_property($Await, "rect_position", Vector2(8, 8), 1.5)
-		tween.parallel().tween_property($Await, "modulate", Color(1,1,1,1), 1.5)
-		if get_parent() is AppWindow:
-			if !get_parent().maximized and !get_parent().snapped_left and !get_parent().snapped_right:
-				tween.parallel().tween_property(get_parent(), "rect_size", Vector2(340, 320), 1.0)
-				tween.parallel().tween_property(get_parent(), "window_min_size", Vector2(360, 340), 1.0)
-			else:
-				get_parent().window_min_size = Vector2(360, 340)
+	#$VersionSelector.queue_free()
+	$Await.rect_position = Vector2(self.rect_size.x+8, 8)
+	$Await.modulate = Color(1,1,1,0)
+	$Await.visible = true
+	
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_EXPO)
+	tween.connect("finished", self, "await_tween_finished")
+	tween.tween_property($VersionSelector, "rect_position", Vector2(-self.rect_size.x, 8), 1.5)
+	tween.parallel().tween_property($VersionSelector, "modulate", Color(1,1,1,0), 1.5)
+	tween.parallel().tween_property($Await, "rect_position", Vector2(8, 8), 1.5)
+	tween.parallel().tween_property($Await, "modulate", Color(1,1,1,1), 1.5)
+	if get_parent() is AppWindow:
+		if !get_parent().maximized and !get_parent().snapped_left and !get_parent().snapped_right:
+			tween.parallel().tween_property(get_parent(), "rect_size", Vector2(340, 320), 1.0)
+			tween.parallel().tween_property(get_parent(), "window_min_size", Vector2(360, 340), 1.0)
+		else:
+			get_parent().window_min_size = Vector2(360, 340)
 
 func await_tween_finished():
 	await_finished = true
@@ -87,7 +86,7 @@ func _process(delta):
 		if get_parent() is AppWindow:
 			set_process(false)
 			get_parent().close_window()
-			OS.execute(Global.downloaded_file_path, [], false)
+			OS.execute(Global.download_file_path, [], false)
 			get_tree().quit()
 	elif Global.download_status != -1 and await_finished:
 		set_process(false)
@@ -151,4 +150,18 @@ func _on_PickLoc_pressed():
 func _on_DownloadLoc_dir_selected(dir : String):
 	download_location = dir
 	download_loc.current_path = dir
-	dll_edit.text = dir
+	selected_dll.text = dir
+	Global.default_dl_path = dir
+	Global.save_settings()
+
+# necessary save function
+func save():
+	var save_dict = {
+		"fling_enabled" : Global.fling_enabled,
+		"bg_window_effect" : Global.bg_window_effect,
+		"window_snap" : Global.window_snap,
+		"clock_seconds_enabled" : Global.csec_enabled,
+		"default_dl_path" : Global.default_dl_path,
+		"desktop_background" : Global.desktop_background
+	}
+	return save_dict

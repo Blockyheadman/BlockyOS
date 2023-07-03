@@ -4,13 +4,13 @@ class_name AppWindow
 signal window_closed
 signal window_hidden
 
-var window_anim_playable = true
-var maximized = false
-var minimized = false
-var snapped_left = false
-var snapped_right = false
-var prev_size = Vector2()
-var prev_pos = Vector2()
+var window_anim_playable := true
+var maximized := false
+var minimized := false
+var snapped_left := false
+var snapped_right := false
+var prev_size := Vector2()
+var prev_pos := Vector2()
 
 var snap_primed = false
 var snap_priming = false

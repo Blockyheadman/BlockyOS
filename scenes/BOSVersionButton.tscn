@@ -2,7 +2,7 @@
 
 [ext_resource path="res://resources/icons/BlockyOS.png" type="Texture" id=1]
 [ext_resource path="res://scripts/BOSVersionButton.gd" type="Script" id=2]
-[ext_resource path="res://resources/presets/StartMenuButton.tres" type="Theme" id=3]
+[ext_resource path="res://resources/presets/GeneralButton.tres" type="Theme" id=3]
 
 [node name="BOSVersionButton" type="HBoxContainer"]
 margin_right = 180.0

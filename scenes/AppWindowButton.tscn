@@ -1,9 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/AppWindowButton.gd" type="Script" id=1]
 [ext_resource path="res://resources/presets/AppButtonSelected.tres" type="StyleBox" id=2]
-
-[sub_resource type="Theme" id=1]
 
 [node name="AppWindowButton" type="Control"]
 anchor_right = 0.031
@@ -26,7 +24,6 @@ margin_left = 8.0
 margin_top = 40.0
 margin_right = 32.0
 margin_bottom = 48.0
-theme = SubResource( 1 )
 custom_styles/panel = ExtResource( 2 )
 
 [connection signal="mouse_entered" from="Button" to="Button" method="_on_Button_mouse_entered"]
