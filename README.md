@@ -10,6 +10,8 @@
 * Feel-good window system
 * Apps support
 * Update Downloader
+* Custom Backgrounds
+* Custom Accent Color
 
 ## Supported Platforms
 * Windows
