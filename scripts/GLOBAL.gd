@@ -1,5 +1,8 @@
 extends Node
 
+var default_bg := preload("res://resources/textures/Backgrounds/DefaultBackground.png")
+var corrupt_bg := preload("res://resources/textures/Backgrounds/CorruptedBackground.png")
+
 # Globals variables for system settings
 var fling_enabled := true
 var bg_window_effect := false
@@ -8,11 +11,11 @@ var csec_enabled := false
 var default_dl_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)
 var desktop_background : String = "res://resources/textures/Backgrounds/DefaultBackground.png"
 
-var bg_texture : ImageTexture
+var bg_texture
 
 var verison_major : int = 1
 var verison_minor : int = 2
-var verison_revision : int = 0
+var verison_revision : int = 1
 var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
 var version_state : String = "Stable"
 
@@ -191,18 +194,18 @@ func _http_request_completed(result, response_code, _headers, body):
 		download_status = result
 
 func load_bg_image(path : String):
-	var bg_image = Image.new()
-	var error = bg_image.load(path)
-	var texture = ImageTexture.new()
+	var bg_image := Image.new()
+	var error := bg_image.load(path)
+	var texture := ImageTexture.new()
 	if error != OK:
+		printerr("Error loading image. Error: %s" % error)
 		desktop_background = "res://resources/textures/Backgrounds/DefaultBackground.png"
-		bg_image.load("res://resources/textures/Backgrounds/DefaultBackground.png")
-		texture.create_from_image(bg_image)
-		bg_texture = texture
-		get_viewport().get_node("Desktop/Background").texture = texture
+		bg_texture = default_bg
+		get_viewport().get_node("Desktop/Background").texture = default_bg
 		save_settings()
 		return
 	
+	print("Loading image at '%s'" % path)
 	texture.create_from_image(bg_image)
 	
 	desktop_background = path

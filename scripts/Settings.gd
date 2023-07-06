@@ -110,20 +110,17 @@ func _on_ResetColor_pressed():
 	_on_color_picked()
 
 func reset_background(error : bool):
-	var texture
 	if !error:
-		texture = create_image("res://resources/textures/Backgrounds/DefaultBackground.png")
-		get_viewport().get_node("Desktop/Background").texture = texture
-		bg_button.icon = texture
-		Global.desktop_background = "res://resources/textures/Backgrounds/DefaultBackground.png"
-		Global.bg_texture = texture
+		get_viewport().get_node("Desktop/Background").texture = Global.default_bg
+		bg_button.icon = Global.default_bg
+		Global.desktop_background =  "resources/textures/Backgrounds/DefaultBackground.png"
+		Global.bg_texture = Global.default_bg
 	else:
-		texture = create_image("res://resources/textures/Backgrounds/CorruptedBackground.png")
-		get_viewport().get_node("Desktop/Background").texture = texture
-		bg_button.icon = texture
-		Global.desktop_background = "res://resources/textures/Backgrounds/CorruptedBackground.png"
-		Global.bg_texture = texture
-		return texture
+		get_viewport().get_node("Desktop/Background").texture = Global.corrupt_bg
+		bg_button.icon = Global.corrupt_bg
+		Global.desktop_background = "resources/textures/Backgrounds/CorruptedBackground.png"
+		Global.bg_texture = Global.corrupt_bg
+		return Global.corrupt_bg
 
 func create_image(path : String):
 	var bg_image = Image.new()

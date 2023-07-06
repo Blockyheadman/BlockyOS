@@ -11,16 +11,14 @@ var menu_button_anim_done := true
 
 var time = Time.get_time_string_from_system()
 
-var peer = NetworkedMultiplayerENet.new()
-const PORT : int = 5
-const IP_ADDRESS : String = "127.0.0.1"
-
 func _ready():
 	var set_error = Global.load_settings()
 	while set_error != 0:
 		set_error = Global.load_settings()
 	
-	$MenuBar/StartMenu/VBoxContainer/DownloadApps.queue_free()
+	print("LOCALIZED PATH: %s" % ProjectSettings.localize_path("res://resources/textures/Backgrounds/DefaultBackground.png"))
+	print("GLOBALIZED PATH: %s" % ProjectSettings.globalize_path("res://resources/textures/Backgrounds/DefaultBackground.png"))
+	
 	$MenuBar/StartMenu/VBoxContainer/UpdateApps.set_v_size_flags(0)
 	OS.min_window_size = Vector2(640,360)
 	
@@ -85,7 +83,7 @@ func _process(_delta):
 	
 	$MenuBar/Clock/Label.text = time
 
-func dropped_files(files: PoolStringArray, screen: int) -> void:
+func dropped_files(files: PoolStringArray, _screen: int) -> void:
 	for i in files.size():
 		if files[i].ends_with(".pck"):
 			var app_name

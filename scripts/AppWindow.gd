@@ -60,8 +60,9 @@ func _process(_delta):
 	#print("Window State: " + str(minimized))
 	
 	if Global.fling_enabled == true:
-		if $DebugLabel.visible == false and OS.has_feature("debug"):
-			$DebugLabel.show()
+		if OS.has_feature("debug"):
+			if $DebugLabel.visible == false:
+				$DebugLabel.show()
 		if prev_size != self.rect_size:
 			window_resizing = true
 		else:
