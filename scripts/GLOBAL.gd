@@ -15,7 +15,7 @@ var bg_texture
 
 var verison_major : int = 1
 var verison_minor : int = 2
-var verison_revision : int = 1
+var verison_revision : int = 2
 var version_full : String = str(verison_major) + "." + str(verison_minor) + "." + str(verison_revision)
 var version_state : String = "Stable"
 

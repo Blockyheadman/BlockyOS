@@ -50,6 +50,8 @@ func _ready():
 	print("\nApps installed: " + str(apps))
 	
 	get_tree().connect("files_dropped", self, "dropped_files")
+	
+	OS.request_permissions()
 
 func _input(event):
 	if event is InputEventKey:

@@ -1,24 +1,17 @@
-**Additional context**
-Add any other context about the problem here.
-
 name: Bug Report
-about: Make a report on any bugs you've found.
+description: Make a report on any bugs you've found.
 title: "[BUG]: "
 labels: ["bug"]
 assignees:
   - Blockyheadman
-body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
 
+body:
   - type: input
     id: describe
     attributes:
       label: Describe the Bug
       description: A clear and concise description of what the bug is.
-      placeholder: Tell us what you see!
+      placeholder: "Ex: When I try to do .. it does .."
     validations:
       required: true
 
@@ -31,16 +24,16 @@ body:
         2. Click on '....'
         3. Scroll down to '....'
         4. See error
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: expected
     attributes:
       label: Expected Behavior.
       placeholder: I expected it to ...
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: dropdown
     id: os
@@ -48,8 +41,10 @@ body:
       label: Desktop OS
       description: What OS (Operating System) are you running?
       options:
-        - Windows (Default)
-        - X11/Linux (Edge)
+        - Windows
+        - macOS
+        - X11/Linux
+        - Android
     validations:
       required: true
 
@@ -58,6 +53,6 @@ body:
     attributes:
       label: Additional Context
       description: Please add any extra context regarding the bug.
-      placeholder: Link to additional resources here.
+      placeholder: Link to additional resources here. Videos and images can be attached here too.
     validations:
       required: false

@@ -18,6 +18,8 @@ func _ready():
 	set_process(false)
 	selected_dll.text = download_location
 	
+	download_loc.current_path = download_location
+	
 	file_checker.request("https://raw.githubusercontent.com/Blockyheadman/BlockyOS/main/versions.json")
 
 func _exit_tree():

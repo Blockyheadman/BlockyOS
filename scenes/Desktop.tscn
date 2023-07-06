@@ -175,20 +175,23 @@ anchor_bottom = 1.0
 
 [node name="Debug1" type="Button" parent="Debugging/DebugTools/GridContainer"]
 margin_right = 256.0
-margin_bottom = 29.0
+margin_bottom = 27.0
 size_flags_horizontal = 3
+theme = ExtResource( 4 )
 text = "[ empty ]"
 
 [node name="Debug2" type="Button" parent="Debugging/DebugTools/GridContainer"]
-margin_top = 33.0
+margin_top = 31.0
 margin_right = 256.0
-margin_bottom = 62.0
+margin_bottom = 58.0
+theme = ExtResource( 4 )
 text = "[ empty ]"
 
 [node name="Debug3" type="Button" parent="Debugging/DebugTools/GridContainer"]
-margin_top = 66.0
+margin_top = 62.0
 margin_right = 256.0
-margin_bottom = 95.0
+margin_bottom = 89.0
+theme = ExtResource( 4 )
 text = "[ empty ]"
 
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/UpdateDownloader" to="." method="_on_UpdateDownloader_pressed"]

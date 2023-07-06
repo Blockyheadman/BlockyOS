@@ -6,15 +6,29 @@ onready var window_bg_button = $MarginContainer/VBoxContainer/ScrollContainer/VB
 onready var window_snap_button = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/WindowSnap/Button
 onready var csec_button = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/CSec/Button
 onready var color_button = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/ChangeColor/Button
+onready var bg_button = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/Background/Button
+onready var reset_bg = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/Background/ResetBG
 onready var reset_color = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/ChangeColor/ResetColor
 onready var description_label = $MarginContainer/VBoxContainer/DescriptionLabel
-onready var bg_button = $MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/Settings/Background/Button
+
+var permissions_granted : PoolStringArray
 
 func _ready():
+	permissions_granted = OS.get_granted_permissions()
 	#info_label.text = info_label.text.replace("{app_path}", str(OS.get_user_data_dir() + "/apps/"))
 	info_label.queue_free()
 	
 	description_label.text = description_label.text.replace("{version}", str(Global.version_full) + "." + str(Global.version_state))
+	
+	if OS.get_name() == "Android":
+		if permissions_granted.find("android.permission.READ_EXTERNAL_STORAGE") == -1:
+			bg_button.disabled = true
+			reset_bg.disabled = true
+		else:
+			bg_button.disabled = false
+			reset_bg.disabled = false
+	
+	$BGDialog.set_current_dir(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES))
 
 func _process(delta):
 	if Global.fling_enabled:
