@@ -18,10 +18,16 @@ _global_script_classes=[ {
 "class": "BOSVersionButton",
 "language": "GDScript",
 "path": "res://scripts/BOSVersionButton.gd"
+}, {
+"base": "HBoxContainer",
+"class": "InstalledAppButton",
+"language": "GDScript",
+"path": "res://scripts/InstalledAppButton.gd"
 } ]
 _global_script_class_icons={
 "AppWindow": "",
-"BOSVersionButton": ""
+"BOSVersionButton": "",
+"InstalledAppButton": ""
 }
 
 [application]

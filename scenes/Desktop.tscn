@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://resources/textures/Backgrounds/DefaultBackground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Desktop.gd" type="Script" id=2]
 [ext_resource path="res://resources/icons/BlockyOS.png" type="Texture" id=3]
 [ext_resource path="res://resources/presets/GeneralButton.tres" type="Theme" id=4]
 [ext_resource path="res://resources/presets/TransparentBlack.tres" type="StyleBox" id=5]
+[ext_resource path="res://resources/textures/Download.png" type="Texture" id=6]
 [ext_resource path="res://resources/textures/Settings.png" type="Texture" id=7]
 [ext_resource path="res://resources/textures/Update.png" type="Texture" id=8]
 
@@ -54,18 +55,27 @@ __meta__ = {
 margin_right = 224.0
 margin_bottom = 220.0
 
-[node name="UpdateDownloader" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
+[node name="InstallApps" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
 margin_right = 224.0
 margin_bottom = 27.0
+theme = ExtResource( 4 )
+text = "Install Apps"
+icon = ExtResource( 6 )
+expand_icon = true
+
+[node name="UpdateDownloader" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
+margin_top = 31.0
+margin_right = 224.0
+margin_bottom = 58.0
 theme = ExtResource( 4 )
 text = "Update Downloader"
 icon = ExtResource( 8 )
 expand_icon = true
 
 [node name="UpdateApps" type="Button" parent="MenuBar/StartMenu/VBoxContainer"]
-margin_top = 31.0
+margin_top = 62.0
 margin_right = 224.0
-margin_bottom = 58.0
+margin_bottom = 89.0
 theme = ExtResource( 4 )
 text = "Update Apps List"
 
@@ -194,6 +204,7 @@ margin_bottom = 89.0
 theme = ExtResource( 4 )
 text = "[ empty ]"
 
+[connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/InstallApps" to="." method="_on_InstallApps_pressed"]
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/UpdateDownloader" to="." method="_on_UpdateDownloader_pressed"]
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/UpdateApps" to="." method="_on_UpdateApps_pressed"]
 [connection signal="pressed" from="MenuBar/StartMenu/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]

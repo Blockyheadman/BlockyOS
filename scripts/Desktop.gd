@@ -10,6 +10,7 @@ var apps : Array
 var menu_button_anim_done := true
 
 var time = Time.get_time_string_from_system()
+var permissions_granted : PoolStringArray
 
 func _ready():
 	var set_error = Global.load_settings()
@@ -52,6 +53,11 @@ func _ready():
 	get_tree().connect("files_dropped", self, "dropped_files")
 	
 	OS.request_permissions()
+	permissions_granted = OS.get_granted_permissions()
+	
+	if OS.get_name() == "Android":
+		if permissions_granted.find("android.permission.READ_EXTERNAL_STORAGE") == -1:
+			$MenuBar/StartMenu/VBoxContainer/InstallApps.disabled = true
 
 func _input(event):
 	if event is InputEventKey:
@@ -85,6 +91,9 @@ func _process(_delta):
 	
 	$MenuBar/Clock/Label.text = time
 
+# CUSTOM FUNCTIONS BELOW
+
+# checks for dropped files on the desktop and adds the apps.
 func dropped_files(files: PoolStringArray, _screen: int) -> void:
 	for i in files.size():
 		if files[i].ends_with(".pck"):
@@ -437,6 +446,16 @@ func update_apps():
 	
 	refresh_app_list()
 
+# hides the start menu
+func hide_start_menu():
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
+	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
+	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
+	$MenuBar/StartButton/Button.pressed = false
+
 # ANIMATIONS GO HERE
 func _on_StartButton_mouse_entered():
 	var tween = get_tree().create_tween()
@@ -451,6 +470,8 @@ func _on_StartButton_mouse_exited():
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property($MenuBar/StartButton/Button, "rect_size", Vector2(60,60), 0.4)
 	tween.parallel().tween_property($MenuBar/StartButton/Button, "rect_position", Vector2(0,0), 0.4)
+
+# WHEN DIFFERENT SYSTEM BUTTONS PRESSED/TOGGLED
 
 func _on_StartButton_toggled(button_pressed):
 	var tween = get_tree().create_tween()
@@ -487,43 +508,24 @@ func _on_StartButton_toggled(button_pressed):
 			windows_children[i].show()
 		Global.start_menu_shown = false
 
-func _on_DownloadApps_pressed():
-	var tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
-	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
-	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
-	$MenuBar/StartButton/Button.pressed = false
+func _on_InstallApps_pressed():
+	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Download.png")
 	var app_node_scene
 	var app_node
-	app_node_scene = load("res://scenes/AppDownloader.tscn")
+	app_node_scene = load("res://scenes/AppInstaller.tscn")
 	print("\n" + str(app_node_scene))
 	app_node = app_node_scene.instance()
 	print("\n" + str(app_node))
-	open_built_in_app(app_node, "App Downloader", icon)
+	open_built_in_app(app_node, "App Installer", icon)
 
 func _on_UpdateApps_pressed():
-	var tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
-	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
-	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
-	$MenuBar/StartButton/Button.pressed = false
-	
+	hide_start_menu()
 	update_apps()
 
 func _on_UpdateDownloader_pressed():
-	var tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
-	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
-	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
-	$MenuBar/StartButton/Button.pressed = false
+	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Update.png")
 	var app_node_scene
@@ -536,13 +538,7 @@ func _on_UpdateDownloader_pressed():
 	open_built_in_app(app_node, "Update Downloader", icon)
 
 func _on_Settings_pressed():
-	var tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,0), 1)
-	tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,740), 0.85)
-	tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
-	$MenuBar/StartButton/Button.pressed = false
+	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Settings.png")
 	var app_node_scene
