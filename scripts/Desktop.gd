@@ -6,9 +6,6 @@ var window_anim_playable := true
 var user_path := OS.get_user_data_dir()
 var apps : Array
 
-# 0 is done. 1 is playing. 2 is ...
-var menu_button_anim_done := true
-
 var time = Time.get_time_string_from_system()
 var permissions_granted : PoolStringArray
 
@@ -20,7 +17,6 @@ func _ready():
 	print("LOCALIZED PATH: %s" % ProjectSettings.localize_path("res://resources/textures/Backgrounds/DefaultBackground.png"))
 	print("GLOBALIZED PATH: %s" % ProjectSettings.globalize_path("res://resources/textures/Backgrounds/DefaultBackground.png"))
 	
-	$MenuBar/StartMenu/VBoxContainer/UpdateApps.set_v_size_flags(0)
 	OS.min_window_size = Vector2(640,360)
 	
 	if OS.has_feature("debug"):
@@ -31,9 +27,6 @@ func _ready():
 	if OS.get_name() == "HTML5":
 		$MenuBar/StartMenu/VBoxContainer/UpdateDownloader.queue_free()
 	
-	#$Debugging/DebugTools.queue_free()
-	
-	#$Debugging/DebugTools.visible = false # override for editor purposes
 	$MenuBar/StartMenu.visible = false
 	$MenuBar/StartMenu.rect_size = Vector2(224, 0)
 	$MenuBar/StartMenu.rect_position = Vector2(0, get_viewport_rect().size.y+20)
@@ -115,7 +108,7 @@ func dropped_files(files: PoolStringArray, _screen: int) -> void:
 			update_apps()
 
 # removes all nodes from the AppsGridContainer
-func clear_app_buttons():
+func clear_app_buttons() -> void:
 	for i in apps.size():# - 1:
 		if has_node("Apps/AppsGridContainer/" + str(apps[i])):
 			var button_path = get_node("Apps/AppsGridContainer/" + apps[i]).get_path()
@@ -125,7 +118,7 @@ func clear_app_buttons():
 			print(get_node("Apps/AppsGridContainer/" + apps[i]))
 
 # resets the AppsGridContainer and creates new buttons for each app.
-func refresh_app_list():
+func refresh_app_list() -> void:
 	var installed_apps = File.new()
 	var array_line = 0
 	
@@ -179,7 +172,7 @@ func refresh_app_list():
 	installed_apps.close()
 
 # opens an app when a button was pressed on the apps screen
-func _on_button_pressed(button):
+func _on_button_pressed(button) -> void:
 	var pressed_button = button.name
 	print("\n" + str(pressed_button) + " button was pressed")
 	
@@ -214,8 +207,8 @@ func _on_button_pressed(button):
 		update_apps()
 	pck_file.close()
 
-# hides or shows the window when pressing the app's icon on the toolbar (OpenWindows)
-func _on_window_button_pressed(button, is_button : bool):
+# changes taskbar panel when pressing the app window's minimize button (OpenWindows)
+func _on_window_button_pressed(button, is_button: bool) -> void:
 	var panel_selected = load("res://resources/presets/AppButtonSelected.tres")
 	var panel_unselected = load("res://resources/presets/AppButtonUnselected.tres")
 	
@@ -260,13 +253,13 @@ func _on_window_button_pressed(button, is_button : bool):
 		get_node("MenuBar/OpenWindowsBar/ScrollContainer/HBoxContainer").get_node(str(button)).get_child(1).add_stylebox_override("panel", panel_unselected)
 
 # hides window when the anim is finished
-func window_anim_done(window_node, hiding):
+func window_anim_done(window_node, hiding: bool) -> void:
 	if hiding == true:
 		window_node.hide()
 	window_anim_playable = true
 
 # creates the window, app icon for the toolbar, the app's visuals, and connects all the actions together.
-func open_app(app_node, app_name : String):
+func open_app(app_node, app_name: String) -> void:
 	var app_name_new = app_name
 	
 	var app_window_path = load("res://scenes/AppWindow.tscn")
@@ -276,8 +269,6 @@ func open_app(app_node, app_name : String):
 	app_window_node.window_title = app_name
 	app_window_node.connect("window_hidden", self, "_on_window_button_pressed")
 	app_window_node.show()
-	#app_window_node.visible = true
-	
 	app_window_node.connect("window_closed", self, "_on_window_closed")
 	
 	var app_button_node = load("res://scenes/AppWindowButton.tscn").instance()
@@ -307,7 +298,7 @@ func open_app(app_node, app_name : String):
 	get_node("MenuBar/OpenWindowsBar/ScrollContainer/HBoxContainer").add_child(app_button_node, true)
 
 # same as 'open_app()' but instead opens an app with built-in resources
-func open_built_in_app(app_node, app_name : String, icon):
+func open_built_in_app(app_node, app_name: String, icon) -> void:
 	var app_name_new = app_name
 	
 	var app_window_path = load("res://scenes/AppWindow.tscn")
@@ -344,7 +335,7 @@ func open_built_in_app(app_node, app_name : String, icon):
 	get_node("MenuBar/OpenWindowsBar/ScrollContainer/HBoxContainer").add_child(app_button_node, true)
 
 # lists all available files from the specified directory
-func dir_contents(path):
+func dir_contents(path: String) -> void:
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		dir.list_dir_begin()
@@ -360,13 +351,12 @@ func dir_contents(path):
 		print("\nAn error occurred when trying to access the path.")
 
 # puts all files found in a directory into an array
-func dir_files_to_array(path):
+func dir_files_to_array(path: String) -> Array:
 	var dir = Directory.new()
-	var file_array = []
+	var file_array := []
 	if dir.open(path) == OK:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		print("\n")
 		while file_name != "":
 			if not dir.current_is_dir():
 				file_array.append(file_name)
@@ -377,9 +367,9 @@ func dir_files_to_array(path):
 	return file_array
 
 # puts all directories found in a directory into an array
-func dir_dirs_to_array(path):
+func dir_dirs_to_array(path: String) -> Array:
 	var dir = Directory.new()
-	var file_array = []
+	var file_array := []
 	if dir.open(path) == OK:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
@@ -394,7 +384,7 @@ func dir_dirs_to_array(path):
 	return file_array
 
 # gets the app's icon saved inside the pck file
-func get_pck_icon(app_name : String) -> String:
+func get_pck_icon(app_name: String) -> String:
 	var pck_file = "user://apps/" + app_name + ".pck"
 	var err = ProjectSettings.load_resource_pack(pck_file)
 	if err == true:
@@ -411,11 +401,12 @@ func get_pck_icon(app_name : String) -> String:
 	return "0"
 
 # connects the window's close signal to the app's toolbar icon to free it
-func _on_window_closed(app_name):
+func _on_window_closed(app_name: String) -> void:
+	print("emitting 'close_app_window_button' signal")
 	emit_signal("close_app_window_button", app_name)
 
 # looks into the apps directory, searches for new apps, and adds or removes apps based on what happened with them.
-func update_apps():
+func update_apps() -> void:
 	var app_files : Array = dir_files_to_array(user_path + "/apps")
 	app_files.remove(app_files.find("installed-apps.txt"))
 	print(app_files)
@@ -447,7 +438,7 @@ func update_apps():
 	refresh_app_list()
 
 # hides the start menu
-func hide_start_menu():
+func hide_start_menu() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
@@ -457,14 +448,14 @@ func hide_start_menu():
 	$MenuBar/StartButton/Button.pressed = false
 
 # ANIMATIONS GO HERE
-func _on_StartButton_mouse_entered():
+func _on_StartButton_mouse_entered() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property($MenuBar/StartButton/Button, "rect_size", Vector2(64,64), 0.4)
 	tween.parallel().tween_property($MenuBar/StartButton/Button, "rect_position", Vector2(-2,-2), 0.4)
 
-func _on_StartButton_mouse_exited():
+func _on_StartButton_mouse_exited() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
@@ -473,7 +464,7 @@ func _on_StartButton_mouse_exited():
 
 # WHEN DIFFERENT SYSTEM BUTTONS PRESSED/TOGGLED
 
-func _on_StartButton_toggled(button_pressed):
+func _on_StartButton_toggled(button_pressed: bool) -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
@@ -483,10 +474,6 @@ func _on_StartButton_toggled(button_pressed):
 		tween.tween_property($MenuBar/StartMenu, "rect_size", Vector2(224,220), 1)
 		tween.parallel().tween_property($MenuBar/StartMenu, "rect_position", Vector2(0,get_viewport_rect().size.y-280), 1)
 		tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,1), 1)
-		"""var windows_children = $Windows/WindowLayer.get_children()
-		print(windows_children)
-		for i in windows_children.size():
-			windows_children[i].hide()"""
 		Global.start_menu_shown = true
 	else:
 		#$MenuBar/StartMenu.focus_mode = Control.FOCUS_NONE
@@ -495,20 +482,9 @@ func _on_StartButton_toggled(button_pressed):
 		tween.parallel().tween_property($MenuBar/StartMenu, "modulate", Color(1,1,1,0), 1)
 		var windows_children = $Windows/WindowLayer.get_children()
 		print(windows_children)
-		for i in windows_children.size():
-			print(windows_children[i])
-			#windows_children[i].set_process(!button_pressed)
-			#windows_children[i].set_process_input(!button_pressed)
-			#windows_children[i].set_process_internal(!button_pressed)
-			#windows_children[i].set_process_unhandled_input(!button_pressed)
-			#windows_children[i].set_process_unhandled_key_input(!button_pressed)
-			#windows_children[i].set_physics_process(!button_pressed)
-			#windows_children[i].set_physics_process_internal(!button_pressed)
-			#tween.parallel().tween_property(children_count[i], "modulate", Color(1,1,1,0.75), 1)
-			windows_children[i].show()
 		Global.start_menu_shown = false
 
-func _on_InstallApps_pressed():
+func _on_InstallApps_pressed() -> void:
 	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Download.png")
@@ -520,11 +496,11 @@ func _on_InstallApps_pressed():
 	print("\n" + str(app_node))
 	open_built_in_app(app_node, "App Installer", icon)
 
-func _on_UpdateApps_pressed():
+func _on_UpdateApps_pressed() -> void:
 	hide_start_menu()
 	update_apps()
 
-func _on_UpdateDownloader_pressed():
+func _on_UpdateDownloader_pressed() -> void:
 	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Update.png")
@@ -537,7 +513,7 @@ func _on_UpdateDownloader_pressed():
 	
 	open_built_in_app(app_node, "Update Downloader", icon)
 
-func _on_Settings_pressed():
+func _on_Settings_pressed() -> void:
 	hide_start_menu()
 	
 	var icon = load("res://resources/textures/Settings.png")
