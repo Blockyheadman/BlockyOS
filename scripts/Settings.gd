@@ -30,7 +30,7 @@ func _ready():
 	
 	$BGDialog.set_current_dir(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES))
 
-func _process(delta):
+func _process(_delta):
 	if Global.fling_enabled:
 		fling_button.text = "Enabled"
 	else:

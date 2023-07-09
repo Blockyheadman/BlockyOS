@@ -80,7 +80,7 @@ func set_app_data(app_ver : String):
 func await_tween_finished():
 	await_finished = true
 
-func _process(delta):
+func _process(_delta):
 	if $Await.visible == true:
 		$Await/VBoxContainer/ScrollContainer/VBoxContainer/MainContainer/LoadingIcon.rect_rotation += 7.5
 	
