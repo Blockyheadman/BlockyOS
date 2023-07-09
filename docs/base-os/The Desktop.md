@@ -8,6 +8,12 @@
 - [User Input](#user-input)
 - [Functions](#functions)
     - [Useful Functions](#useful-functions)
+- [Layout](#layout)
+    - [Desktop Layer](#desktop-layer)
+    - [Apps Grid](#apps-grid)
+    - [Menu Bar](#menu-bar)
+    - [Windows](#windows)
+    - [Debugging](#debugging)
 
 # Introduction
 Welcome! This page will discuss how the desktop works and the different interactions it has with other elements. This will be your main of learning how the main UI is dealt with. If you're wondering how this would apply to development, it's neccessary to understand how this works if you're making a customized version of the BlockyOS app itself. for app development, it's less, if not, not at all important. 
@@ -114,3 +120,28 @@ Useful functions for app devs:
 - `dir_dirs_to_array()`
 
 While those functions can be used directly, it's better to copy them and use them in the app itself so it doesn't need to connect to the desktop as that can get confusing. Trust me, I know.
+# Layout
+The layout for the desktop scene is not all to complicated but it's best to know what items are on what layers and when they can or cannot show up in the app.
+
+## Desktop Layer
+The first layer to show up in the desktop is the `Background` layer. It's just an image displayed behind everything and requires no interactivity. In the future, this could change to support live backgrounds as videos and would make for some interesting customization later on.
+
+## Apps Grid
+The next piece is the `AppsGridContainer` layer. This layer contains all of the buttons for installed apps and it just above the `Desktop` layer. You can think of it as a permanent app drawer. In the future, I might make it so that the apps can either be organized on the grid or they have their own container so your desktop can be clear and for other stuff.
+
+## Menu Bar
+Next up is the menu bar. This contains the `StartMenu`, `StartButton`, `OpenWindows`, and the `Clock` pieces. This altogether makes the taskbar and the start menu.
+
+- `StartMenu` refers to the start menu. The start menu contains the main apps and functions that you may use constantly.
+
+- `StartButton` is the button that is used to open the start menu. This button has one use and one use only.
+
+- `OpenWindows` is the section of the taskbar that has all of your open apps. Apps here don't stack and currently just toggle minimize on the window. If too many apps show up in the bar, it makes a scroll bar and can then scroll horizontally. Possibly in the future it will allow for hover to show the window.
+
+- `Clock` is the clock. Yeah. Just a clock. ._.
+
+## Windows
+After the `MenuBar`, we have the `Windows` layer. The windows layer contains all of your open windows. Not much to really say about the `Windows` layer.
+
+## Debugging
+The debugging layer will be the most important for working on new features on BlockyOS. This layer contains 3, unset buttons for debugging purposes. These buttons only will show on the debug releases of BlockyOS. Otherwise, they never show up to the end user.

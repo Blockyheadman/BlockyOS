@@ -160,6 +160,8 @@ text = "23:59:59"
 align = 1
 
 [node name="Windows" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="WindowLayer" type="CanvasLayer" parent="Windows"]
 layer = 2
